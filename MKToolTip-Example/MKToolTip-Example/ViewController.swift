@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MKToolTip
 
 class ViewController: UIViewController {
 
@@ -21,5 +22,20 @@ class ViewController: UIViewController {
     }
 
 
+    @IBAction func barButton1Tapped(_ sender: UIBarButtonItem) {
+        MKToolTipView.show(item: sender, identifier: "", title: "Pharetra", message: "Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.", arrowPosition: .top, delegate: nil)
+    }
+    
+    @IBAction func button1Tapped(_ sender: UIButton) {
+        MKToolTipView.show(view: sender, identifier: "", title: "Pharetra", message: "Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.", arrowPosition: .left, delegate: nil)
+    }
+    
+    @IBAction func button2Tapped(_ sender: UIButton) {
+        MKToolTipView.show(view: sender, identifier: "", title: "Pharetra", message: "Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.", arrowPosition: .right, delegate: nil)
+    }
+    
+    @IBAction func button3Tapped(_ sender: UIButton) {
+        MKToolTipView.show(view: sender, identifier: "", title: "Pharetra", message: "Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.", arrowPosition: .bottom, delegate: nil)
+    }
 }
 

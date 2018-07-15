@@ -4,4 +4,7 @@
    <FileRef
       location = "group:MKToolTip/MKToolTip.xcodeproj">
    </FileRef>
+   <FileRef
+      location = "group:MKToolTip-Example/MKToolTip-Example.xcodeproj">
+   </FileRef>
 </Workspace>
