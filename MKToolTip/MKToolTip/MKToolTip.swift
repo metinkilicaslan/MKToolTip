@@ -58,7 +58,6 @@ public extension MKToolTipView {
         
         public var bubbleInset: CGFloat = 15
         public var bubbleSpacing: CGFloat = 5
-        public var bubbleFrame: CGRect = .zero
         public var bubbleCornerRadius: CGFloat = 5
         public var bubbleMaxWidth: CGFloat = 210
         public var bubbleGradientlocations: [CGFloat] = [0.05, 1.0]
@@ -107,6 +106,7 @@ open class MKToolTipView: UIView {
     // MARK: Variables
     
     private var arrowPosition: ArrowPosition = .top
+    private var bubbleFrame: CGRect = .zero
     
     private var containerWindow: UIWindow?
     private unowned var presentingView: UIView
@@ -222,22 +222,22 @@ open class MKToolTipView: UIView {
             xOrigin = refViewFrame.center.x - contentSize.width / 2
             yOrigin = refViewFrame.y + refViewFrame.height
             preferences.drawing.arrowTip = CGPoint(x: refViewFrame.center.x - xOrigin, y: 0)
-            preferences.drawing.bubbleFrame = CGRect(x: 0, y: preferences.drawing.arrowSize.height, width: bubbleSize.width, height: bubbleSize.height)
+            bubbleFrame = CGRect(x: 0, y: preferences.drawing.arrowSize.height, width: bubbleSize.width, height: bubbleSize.height)
         case .right:
             xOrigin = refViewFrame.x - contentSize.width
             yOrigin = refViewFrame.center.y - contentSize.height / 2
             preferences.drawing.arrowTip = CGPoint(x: bubbleSize.width + preferences.drawing.arrowSize.height, y: refViewFrame.center.y - yOrigin)
-            preferences.drawing.bubbleFrame = CGRect(x: 0, y: 0, width: bubbleSize.width, height: bubbleSize.height)
+            bubbleFrame = CGRect(x: 0, y: 0, width: bubbleSize.width, height: bubbleSize.height)
         case .bottom:
             xOrigin = refViewFrame.center.x - contentSize.width / 2
             yOrigin = refViewFrame.y - contentSize.height
             preferences.drawing.arrowTip = CGPoint(x: refViewFrame.center.x - xOrigin, y: bubbleSize.height + preferences.drawing.arrowSize.height)
-            preferences.drawing.bubbleFrame = CGRect(x: 0, y: 0, width: bubbleSize.width, height: bubbleSize.height)
+            bubbleFrame = CGRect(x: 0, y: 0, width: bubbleSize.width, height: bubbleSize.height)
         case .left:
             xOrigin = refViewFrame.x + refViewFrame.width
             yOrigin = refViewFrame.center.y - contentSize.height / 2
             preferences.drawing.arrowTip = CGPoint(x: 0, y: refViewFrame.center.y - yOrigin)
-            preferences.drawing.bubbleFrame = CGRect(x: preferences.drawing.arrowSize.height, y: 0, width: bubbleSize.width, height: bubbleSize.height)
+            bubbleFrame = CGRect(x: preferences.drawing.arrowSize.height, y: 0, width: bubbleSize.width, height: bubbleSize.height)
         }
         
         let calculatedFrame = CGRect(x: xOrigin, y: yOrigin, width: contentSize.width, height: contentSize.height)
@@ -358,13 +358,13 @@ open class MKToolTipView: UIView {
         
         switch arrowPosition {
         case .top:
-            let startingPoint = CGPoint(x: preferences.drawing.arrowTip.x - preferences.drawing.arrowSize.width / 2, y: preferences.drawing.bubbleFrame.y)
+            let startingPoint = CGPoint(x: preferences.drawing.arrowTip.x - preferences.drawing.arrowSize.width / 2, y: bubbleFrame.y)
             path.move(to: startingPoint)
             addTopArc(to: path)
             addLeftArc(to: path)
             addBottomArc(to: path)
             addRightArc(to: path)
-            path.addLine(to: CGPoint(x: preferences.drawing.arrowTip.x + preferences.drawing.arrowSize.width / 2, y: preferences.drawing.bubbleFrame.y))
+            path.addLine(to: CGPoint(x: preferences.drawing.arrowTip.x + preferences.drawing.arrowSize.width / 2, y: bubbleFrame.y))
             addArrowTipArc(with: startingPoint, to: path)
         case .right:
             let startingPoint = CGPoint(x: preferences.drawing.arrowTip.x - preferences.drawing.arrowSize.height, y: preferences.drawing.arrowTip.y - preferences.drawing.arrowSize.width / 2)
@@ -376,13 +376,13 @@ open class MKToolTipView: UIView {
             path.addLine(to: CGPoint(x: preferences.drawing.arrowTip.x - preferences.drawing.arrowSize.height, y: preferences.drawing.arrowTip.y + preferences.drawing.arrowSize.width / 2))
             addArrowTipArc(with: startingPoint, to: path)
         case .bottom:
-            let startingPoint = CGPoint(x: preferences.drawing.arrowTip.x + preferences.drawing.arrowSize.width / 2, y: preferences.drawing.bubbleFrame.y + preferences.drawing.bubbleFrame.height)
+            let startingPoint = CGPoint(x: preferences.drawing.arrowTip.x + preferences.drawing.arrowSize.width / 2, y: bubbleFrame.y + bubbleFrame.height)
             path.move(to: startingPoint)
             addBottomArc(to: path)
             addRightArc(to: path)
             addTopArc(to: path)
             addLeftArc(to: path)
-            path.addLine(to: CGPoint(x: preferences.drawing.arrowTip.x - preferences.drawing.arrowSize.width / 2, y: preferences.drawing.bubbleFrame.y + preferences.drawing.bubbleFrame.height))
+            path.addLine(to: CGPoint(x: preferences.drawing.arrowTip.x - preferences.drawing.arrowSize.width / 2, y: bubbleFrame.y + bubbleFrame.height))
             addArrowTipArc(with: startingPoint, to: path)
         case .left:
             let startingPoint = CGPoint(x: preferences.drawing.arrowTip.x + preferences.drawing.arrowSize.height, y: preferences.drawing.arrowTip.y + preferences.drawing.arrowSize.width / 2)
@@ -405,19 +405,19 @@ open class MKToolTipView: UIView {
     }
     
     private func addTopArc(to path: CGMutablePath) {
-        path.addArc(tangent1End: CGPoint(x: preferences.drawing.bubbleFrame.x, y:  preferences.drawing.bubbleFrame.y), tangent2End: CGPoint(x: preferences.drawing.bubbleFrame.x, y: preferences.drawing.bubbleFrame.y + preferences.drawing.bubbleFrame.height), radius: preferences.drawing.bubbleCornerRadius)
+        path.addArc(tangent1End: CGPoint(x: bubbleFrame.x, y:  bubbleFrame.y), tangent2End: CGPoint(x: bubbleFrame.x, y: bubbleFrame.y + bubbleFrame.height), radius: preferences.drawing.bubbleCornerRadius)
     }
     
     private func addRightArc(to path: CGMutablePath) {
-        path.addArc(tangent1End: CGPoint(x: preferences.drawing.bubbleFrame.x + preferences.drawing.bubbleFrame.width, y: preferences.drawing.bubbleFrame.y), tangent2End: CGPoint(x: preferences.drawing.bubbleFrame.x, y: preferences.drawing.bubbleFrame.y), radius: preferences.drawing.bubbleCornerRadius)
+        path.addArc(tangent1End: CGPoint(x: bubbleFrame.x + bubbleFrame.width, y: bubbleFrame.y), tangent2End: CGPoint(x: bubbleFrame.x, y: bubbleFrame.y), radius: preferences.drawing.bubbleCornerRadius)
     }
     
     private func addBottomArc(to path: CGMutablePath) {
-        path.addArc(tangent1End: CGPoint(x: preferences.drawing.bubbleFrame.x + preferences.drawing.bubbleFrame.width, y: preferences.drawing.bubbleFrame.y + preferences.drawing.bubbleFrame.height), tangent2End: CGPoint(x: preferences.drawing.bubbleFrame.x + preferences.drawing.bubbleFrame.width, y: preferences.drawing.bubbleFrame.y), radius: preferences.drawing.bubbleCornerRadius)
+        path.addArc(tangent1End: CGPoint(x: bubbleFrame.x + bubbleFrame.width, y: bubbleFrame.y + bubbleFrame.height), tangent2End: CGPoint(x: bubbleFrame.x + bubbleFrame.width, y: bubbleFrame.y), radius: preferences.drawing.bubbleCornerRadius)
     }
     
     private func addLeftArc(to path: CGMutablePath) {
-        path.addArc(tangent1End: CGPoint(x: preferences.drawing.bubbleFrame.x, y: preferences.drawing.bubbleFrame.y + preferences.drawing.bubbleFrame.height), tangent2End: CGPoint(x: preferences.drawing.bubbleFrame.x + preferences.drawing.bubbleFrame.width, y: preferences.drawing.bubbleFrame.y + preferences.drawing.bubbleFrame.height), radius: preferences.drawing.bubbleCornerRadius)
+        path.addArc(tangent1End: CGPoint(x: bubbleFrame.x, y: bubbleFrame.y + bubbleFrame.height), tangent2End: CGPoint(x: bubbleFrame.x + bubbleFrame.width, y: bubbleFrame.y + bubbleFrame.height), radius: preferences.drawing.bubbleCornerRadius)
     }
     
     private func addArrowTipArc(with startingPoint: CGPoint, to path: CGMutablePath) {
@@ -430,8 +430,8 @@ open class MKToolTipView: UIView {
         paragraphStyle.alignment = .left
         paragraphStyle.lineBreakMode = NSLineBreakMode.byWordWrapping
         
-        let xOrigin = preferences.drawing.bubbleFrame.x + preferences.drawing.bubbleInset
-        var yOrigin = preferences.drawing.bubbleFrame.y + preferences.drawing.bubbleInset
+        let xOrigin = bubbleFrame.x + preferences.drawing.bubbleInset
+        var yOrigin = bubbleFrame.y + preferences.drawing.bubbleInset
         
         if title != nil {
             let titleRect = CGRect(x: xOrigin, y: yOrigin, width: titleSize.width, height: titleSize.height)
