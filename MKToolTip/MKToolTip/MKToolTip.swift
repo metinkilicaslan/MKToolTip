@@ -121,8 +121,6 @@ open class MKToolTipView: UIView {
     
     private var preferences: Preferences
     
-    open static var defaultPreferences = Preferences()
-    
     // MARK: Lazy variables
     
     private lazy var gradient: CGGradient = { [unowned self] in
