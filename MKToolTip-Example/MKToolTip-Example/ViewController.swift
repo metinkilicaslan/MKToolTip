@@ -31,11 +31,19 @@ class ViewController: UIViewController {
     }
     
     @IBAction func button2Tapped(_ sender: UIButton) {
-        MKToolTipView.show(view: sender, identifier: "", title: "Pharetra", message: "Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.", arrowPosition: .right, delegate: nil)
+        let gradientColor = UIColor(red: 0.165, green: 0.322, blue: 0.596, alpha: 1.000)
+        let gradientColor2 = UIColor(red: 0.118, green: 0.235, blue: 0.447, alpha: 1.000)
+        let preference = MKToolTipView.defaultPreferences
+        preference.drawing.bubbleGradientColors = [gradientColor.cgColor, gradientColor2.cgColor]
+        MKToolTipView.show(view: sender, identifier: "", title: "Dapibus", message: "Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.", arrowPosition: .right, preferences: preference, delegate: nil)
     }
     
     @IBAction func button3Tapped(_ sender: UIButton) {
-        MKToolTipView.show(view: sender, identifier: "", title: "Pharetra", message: "Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.", arrowPosition: .bottom, delegate: nil)
+        let gradientColor = UIColor(red: 0.988, green: 0.714, blue: 0.624, alpha: 1.000)
+        let gradientColor2 = UIColor(red: 0.988, green: 0.714, blue: 0.624, alpha: 1.000)
+        let preference = MKToolTipView.defaultPreferences
+        preference.drawing.bubbleGradientColors = [gradientColor.cgColor, gradientColor2.cgColor]
+        MKToolTipView.show(view: sender, identifier: "", message: "Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.", arrowPosition: .bottom, preferences: preference, delegate: nil)
     }
 }
 
