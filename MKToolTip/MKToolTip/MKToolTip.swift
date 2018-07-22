@@ -1,5 +1,5 @@
 //
-//  MKToolTipView.swift
+//  MKToolTip.swift
 //
 // Copyright (c) 2018 Metin Kilicaslan
 //
@@ -23,25 +23,25 @@
 
 import UIKit
 
-@objc public protocol MKToolTipViewDelegate: class {
+@objc public protocol MKToolTipDelegate: class {
     func toolTipViewDidAppear(for identifier: String)
     func toolTipViewDidDisappear(for identifier: String, with timeInterval: TimeInterval)
 }
 
 // MARK: Public methods extension
 
-public extension MKToolTipView {
+public extension MKToolTip {
     
     // MARK: Class methods
     
-    public class func show(item: UIBarItem, identifier: String, title: String? = nil, message: String, arrowPosition: ArrowPosition, preferences: Preferences = Preferences(), delegate: MKToolTipViewDelegate? = nil) {
+    public class func show(item: UIBarItem, identifier: String, title: String? = nil, message: String, arrowPosition: ArrowPosition, preferences: Preferences = Preferences(), delegate: MKToolTipDelegate? = nil) {
         if let view = item.view {
             show(view: view, identifier: identifier, title: title, message: message, arrowPosition: arrowPosition, preferences: preferences, delegate: delegate)
         }
     }
     
-    public class func show(view: UIView, identifier: String, title: String? = nil, message: String, arrowPosition: ArrowPosition, preferences: Preferences = Preferences(), delegate: MKToolTipViewDelegate? = nil) {
-        let tooltip = MKToolTipView(view: view, identifier: identifier, title: title, message: message, arrowPosition: arrowPosition, preferences: preferences, delegate: delegate)
+    public class func show(view: UIView, identifier: String, title: String? = nil, message: String, arrowPosition: ArrowPosition, preferences: Preferences = Preferences(), delegate: MKToolTipDelegate? = nil) {
+        let tooltip = MKToolTip(view: view, identifier: identifier, title: title, message: message, arrowPosition: arrowPosition, preferences: preferences, delegate: delegate)
         tooltip.calculateFrame()
         tooltip.show()
     }
@@ -92,9 +92,9 @@ public extension MKToolTipView {
     
 }
 
-// MARK: MKToolTipView class implementation
+// MARK: MKToolTip class implementation
 
-open class MKToolTipView: UIView {
+open class MKToolTip: UIView {
     
     @objc public enum ArrowPosition: Int {
         case top
@@ -115,7 +115,7 @@ open class MKToolTipView: UIView {
     private var title: String?
     private var message: String
     
-    private weak var delegate: MKToolTipViewDelegate?
+    private weak var delegate: MKToolTipDelegate?
     
     private var viewDidAppearDate: Date = Date()
     
@@ -184,7 +184,7 @@ open class MKToolTipView: UIView {
     
     // MARK: Initializer
     
-    init(view: UIView, identifier: String, title: String? = nil, message: String, arrowPosition: ArrowPosition, preferences: Preferences, delegate: MKToolTipViewDelegate? = nil) {
+    init(view: UIView, identifier: String, title: String? = nil, message: String, arrowPosition: ArrowPosition, preferences: Preferences, delegate: MKToolTipDelegate? = nil) {
         self.presentingView = view
         self.identifier = identifier
         self.title = title
