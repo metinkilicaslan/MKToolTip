@@ -3,6 +3,8 @@ Description
 
 ```MKToolTip``` is a customizable tooltip view written in Swift that can be used as a informative tip.
 
+<img src="https://github.com/metinkilicaslan/MKToolTip/blob/master/MKToolTip.gif" width="320">
+
 Installation
 --------------
 
