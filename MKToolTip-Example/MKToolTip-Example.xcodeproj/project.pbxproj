@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B5BD28FC210B8F1C005682A9 /* MKToolTip.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5BD28FB210B8F1C005682A9 /* MKToolTip.framework */; };
+		B5BD28FD210B8F1C005682A9 /* MKToolTip.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B5BD28FB210B8F1C005682A9 /* MKToolTip.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B5CCDEF920FB5C7500855E09 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5CCDEF820FB5C7500855E09 /* AppDelegate.swift */; };
 		B5CCDEFB20FB5C7500855E09 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5CCDEFA20FB5C7500855E09 /* ViewController.swift */; };
 		B5CCDEFE20FB5C7500855E09 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B5CCDEFC20FB5C7500855E09 /* Main.storyboard */; };
@@ -25,7 +27,22 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		B5BD28FE210B8F1C005682A9 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				B5BD28FD210B8F1C005682A9 /* MKToolTip.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		B5BD28FB210B8F1C005682A9 /* MKToolTip.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MKToolTip.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B5CCDEF520FB5C7500855E09 /* MKToolTip-Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MKToolTip-Example.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B5CCDEF820FB5C7500855E09 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B5CCDEFA20FB5C7500855E09 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -43,6 +60,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B5BD28FC210B8F1C005682A9 /* MKToolTip.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -59,6 +77,7 @@
 		B5CCDEEC20FB5C7500855E09 = {
 			isa = PBXGroup;
 			children = (
+				B5BD28FB210B8F1C005682A9 /* MKToolTip.framework */,
 				B5CCDEF720FB5C7500855E09 /* MKToolTip-Example */,
 				B5CCDF0C20FB5C7600855E09 /* MKToolTip-ExampleTests */,
 				B5CCDEF620FB5C7500855E09 /* Products */,
@@ -106,6 +125,7 @@
 				B5CCDEF120FB5C7500855E09 /* Sources */,
 				B5CCDEF220FB5C7500855E09 /* Frameworks */,
 				B5CCDEF320FB5C7500855E09 /* Resources */,
+				B5BD28FE210B8F1C005682A9 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
