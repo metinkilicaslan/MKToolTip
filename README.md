@@ -49,7 +49,7 @@ MKToolTip.show(view: button1, identifier: "identifier", title: "Dapibus", messag
 Public interface
 --------------
 
-###Delegate
+### Delegate
 
 ```swift
 public protocol MKToolTipDelegate: class {
@@ -58,7 +58,7 @@ public protocol MKToolTipDelegate: class {
 }
 ```
 
-###Public methods
+### Public methods
 
 ```swift
 public class func show(item: UIBarItem, identifier: String, title: String? = nil, message: String, arrowPosition: ArrowPosition, preferences: Preferences = Preferences(), delegate: MKToolTipDelegate? = nil)
