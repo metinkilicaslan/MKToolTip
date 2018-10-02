@@ -34,13 +34,13 @@ public extension MKToolTip {
     
     // MARK: Class methods
     
-    public class func show(item: UIBarItem, identifier: String, title: String? = nil, message: String, arrowPosition: ArrowPosition, preferences: Preferences = Preferences(), delegate: MKToolTipDelegate? = nil) {
+    @objc public class func show(item: UIBarItem, identifier: String, title: String? = nil, message: String, arrowPosition: ArrowPosition, preferences: Preferences = Preferences(), delegate: MKToolTipDelegate? = nil) {
         if let view = item.view {
             show(view: view, identifier: identifier, title: title, message: message, arrowPosition: arrowPosition, preferences: preferences, delegate: delegate)
         }
     }
     
-    public class func show(view: UIView, identifier: String, title: String? = nil, message: String, arrowPosition: ArrowPosition, preferences: Preferences = Preferences(), delegate: MKToolTipDelegate? = nil) {
+    @objc public class func show(view: UIView, identifier: String, title: String? = nil, message: String, arrowPosition: ArrowPosition, preferences: Preferences = Preferences(), delegate: MKToolTipDelegate? = nil) {
         let tooltip = MKToolTip(view: view, identifier: identifier, title: title, message: message, arrowPosition: arrowPosition, preferences: preferences, delegate: delegate)
         tooltip.calculateFrame()
         tooltip.show()
@@ -52,43 +52,43 @@ public extension MKToolTip {
 @objc public class Preferences: NSObject {
     
     @objc public class Drawing: NSObject {
-        public var arrowTip: CGPoint = .zero
-        public var arrowSize: CGSize = CGSize(width: 20, height: 10)
-        public var arrowTipCornerRadius: CGFloat = 5
+        @objc public var arrowTip: CGPoint = .zero
+        @objc public var arrowSize: CGSize = CGSize(width: 20, height: 10)
+        @objc public var arrowTipCornerRadius: CGFloat = 5
         
-        public var bubbleInset: CGFloat = 15
-        public var bubbleSpacing: CGFloat = 5
-        public var bubbleCornerRadius: CGFloat = 5
-        public var bubbleMaxWidth: CGFloat = 210
-        public var bubbleGradientlocations: [CGFloat] = [0.05, 1.0]
-        public var bubbleGradientColors: [CGColor] = [UIColor(red: 0.761, green: 0.914, blue: 0.984, alpha: 1.000).cgColor, UIColor(red: 0.631, green: 0.769, blue: 0.992, alpha: 1.000).cgColor]
+        @objc public var bubbleInset: CGFloat = 15
+        @objc public var bubbleSpacing: CGFloat = 5
+        @objc public var bubbleCornerRadius: CGFloat = 5
+        @objc public var bubbleMaxWidth: CGFloat = 210
+        @objc public var bubbleGradientlocations: [CGFloat] = [0.05, 1.0]
+        @objc public var bubbleGradientColors: [UIColor] = [UIColor(red: 0.761, green: 0.914, blue: 0.984, alpha: 1.000), UIColor(red: 0.631, green: 0.769, blue: 0.992, alpha: 1.000)]
         
-        public var titleFont: UIFont = UIFont.systemFont(ofSize: 12, weight: .bold)
-        public var titleColor: UIColor = .white
+        @objc public var titleFont: UIFont = UIFont.systemFont(ofSize: 12, weight: .bold)
+        @objc public var titleColor: UIColor = .white
         
-        public var messageFont: UIFont = UIFont.systemFont(ofSize: 12, weight: .regular)
-        public var messageColor: UIColor = .white
+        @objc public var messageFont: UIFont = UIFont.systemFont(ofSize: 12, weight: .regular)
+        @objc public var messageColor: UIColor = .white
         
-        public var backgroundGradientlocations: [CGFloat] = [0.05, 1.0]
-        public var backgrounGradientColors: [CGColor] = [UIColor.clear.cgColor, UIColor.black.withAlphaComponent(0.4).cgColor]
+        @objc public var backgroundGradientlocations: [CGFloat] = [0.05, 1.0]
+        @objc public var backgrounGradientColors: [UIColor] = [UIColor.clear, UIColor.black.withAlphaComponent(0.4)]
     }
     
     @objc public class Animating: NSObject {
-        public var dismissTransform: CGAffineTransform = CGAffineTransform(scaleX: 0.1, y: 0.1)
-        public var showInitialTransform: CGAffineTransform = CGAffineTransform(scaleX: 0, y: 0)
-        public var showFinalTransform: CGAffineTransform = .identity
-        public var springDamping: CGFloat = 0.7
-        public var springVelocity: CGFloat = 0.7
-        public var showInitialAlpha: CGFloat = 0
-        public var dismissFinalAlpha: CGFloat = 0
-        public var showDuration: TimeInterval = 0.7
-        public var dismissDuration: TimeInterval = 0.7
+        @objc public var dismissTransform: CGAffineTransform = CGAffineTransform(scaleX: 0.1, y: 0.1)
+        @objc public var showInitialTransform: CGAffineTransform = CGAffineTransform(scaleX: 0, y: 0)
+        @objc public var showFinalTransform: CGAffineTransform = .identity
+        @objc public var springDamping: CGFloat = 0.7
+        @objc public var springVelocity: CGFloat = 0.7
+        @objc public var showInitialAlpha: CGFloat = 0
+        @objc public var dismissFinalAlpha: CGFloat = 0
+        @objc public var showDuration: TimeInterval = 0.7
+        @objc public var dismissDuration: TimeInterval = 0.7
     }
     
-    public var drawing: Drawing = Drawing()
-    public var animating: Animating = Animating()
+    @objc public var drawing: Drawing = Drawing()
+    @objc public var animating: Animating = Animating()
     
-    public override init() {}
+    @objc public override init() {}
     
 }
 
@@ -124,7 +124,7 @@ open class MKToolTip: UIView {
     // MARK: Lazy variables
     
     private lazy var gradient: CGGradient = { [unowned self] in
-        let colors = self.preferences.drawing.bubbleGradientColors as CFArray
+        let colors = self.preferences.drawing.bubbleGradientColors.map { $0.cgColor } as CFArray
         let locations = self.preferences.drawing.bubbleGradientlocations
         return CGGradient(colorsSpace: nil, colors: colors, locations: locations)!
         }()
@@ -450,7 +450,7 @@ private class RadialGradientBackgroundLayer: CALayer {
     private var center: CGPoint = .zero
     private var radius: CGFloat = 0
     private var locations: [CGFloat] = [CGFloat]()
-    private var colors: [CGColor] = [CGColor]()
+    private var colors: [UIColor] = [UIColor]()
     
     @available(*, unavailable)
     required override init(layer: Any) {
@@ -462,7 +462,7 @@ private class RadialGradientBackgroundLayer: CALayer {
         fatalError("init(coder:) has not been implemented")
     }
     
-    init(frame: CGRect, center: CGPoint, radius: CGFloat, locations: [CGFloat], colors: [CGColor]) {
+    init(frame: CGRect, center: CGPoint, radius: CGFloat, locations: [CGFloat], colors: [UIColor]) {
         super.init()
         needsDisplayOnBoundsChange = true
         self.frame = frame
@@ -475,6 +475,7 @@ private class RadialGradientBackgroundLayer: CALayer {
     override func draw(in ctx: CGContext) {
         ctx.saveGState()
         let colorSpace = CGColorSpaceCreateDeviceRGB()
+        let colors = self.colors.map { $0.cgColor }
         let gradient = CGGradient(colorsSpace: colorSpace, colors: colors as CFArray, locations: locations)
         ctx.drawRadialGradient(gradient!, startCenter: center, startRadius: 0, endCenter: center, endRadius: radius, options: [])
         ctx.restoreGState()
