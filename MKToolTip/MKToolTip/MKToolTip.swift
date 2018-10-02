@@ -32,7 +32,7 @@ import UIKit
 
 public extension UIView {
 
-    @objc public func showToolTip(identifier: String, title: String? = nil, message: String, arrowPosition: MKToolTip.ArrowPosition, preferences: Preferences = Preferences(), delegate: MKToolTipDelegate? = nil) {
+    @objc public func showToolTip(identifier: String, title: String? = nil, message: String, arrowPosition: MKToolTip.ArrowPosition, preferences: ToolTipPreferences = ToolTipPreferences(), delegate: MKToolTipDelegate? = nil) {
         let tooltip = MKToolTip(view: self, identifier: identifier, title: title, message: message, arrowPosition: arrowPosition, preferences: preferences, delegate: delegate)
         tooltip.calculateFrame()
         tooltip.show()
@@ -42,7 +42,7 @@ public extension UIView {
 
 public extension UIBarItem {
     
-    @objc public func showToolTip(identifier: String, title: String? = nil, message: String, arrowPosition: MKToolTip.ArrowPosition, preferences: Preferences = Preferences(), delegate: MKToolTipDelegate? = nil) {
+    @objc public func showToolTip(identifier: String, title: String? = nil, message: String, arrowPosition: MKToolTip.ArrowPosition, preferences: ToolTipPreferences = ToolTipPreferences(), delegate: MKToolTipDelegate? = nil) {
         if let view = self.view {
             view.showToolTip(identifier: identifier, title: title, message: message, arrowPosition: arrowPosition, preferences: preferences, delegate: delegate)
         }
@@ -52,7 +52,7 @@ public extension UIBarItem {
 
 // MARK: Preferences
 
-@objc public class Preferences: NSObject {
+@objc public class ToolTipPreferences: NSObject {
     
     @objc public class Drawing: NSObject {
         @objc public var arrowTip: CGPoint = .zero
@@ -122,7 +122,7 @@ open class MKToolTip: UIView {
     
     private var viewDidAppearDate: Date = Date()
     
-    private var preferences: Preferences
+    private var preferences: ToolTipPreferences
     
     // MARK: Lazy variables
     
@@ -187,7 +187,7 @@ open class MKToolTip: UIView {
     
     // MARK: Initializer
     
-    init(view: UIView, identifier: String, title: String? = nil, message: String, arrowPosition: ArrowPosition, preferences: Preferences, delegate: MKToolTipDelegate? = nil) {
+    init(view: UIView, identifier: String, title: String? = nil, message: String, arrowPosition: ArrowPosition, preferences: ToolTipPreferences, delegate: MKToolTipDelegate? = nil) {
         self.presentingView = view
         self.identifier = identifier
         self.title = title

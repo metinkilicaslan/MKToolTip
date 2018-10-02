@@ -29,7 +29,7 @@ class ViewController: UIViewController {
     @IBAction func button1Tapped(_ sender: UIButton) {
         let gradientColor = UIColor(red: 0.886, green: 0.922, blue: 0.941, alpha: 1.000)
         let gradientColor2 = UIColor(red: 0.812, green: 0.851, blue: 0.875, alpha: 1.000)
-        let preference = Preferences()
+        let preference = ToolTipPreferences()
         preference.drawing.bubbleGradientColors = [gradientColor, gradientColor2]
         preference.drawing.arrowTipCornerRadius = 0
         preference.drawing.messageColor = .black
@@ -39,7 +39,7 @@ class ViewController: UIViewController {
     @IBAction func button2Tapped(_ sender: UIButton) {
         let gradientColor = UIColor(red: 0.165, green: 0.322, blue: 0.596, alpha: 1.000)
         let gradientColor2 = UIColor(red: 0.118, green: 0.235, blue: 0.447, alpha: 1.000)
-        let preference = Preferences()
+        let preference = ToolTipPreferences()
         preference.drawing.bubbleGradientColors = [gradientColor, gradientColor2]
         sender.showToolTip(identifier: "", title: "Dapibus", message: "Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.", arrowPosition: .right, preferences: preference, delegate: nil)
     }
@@ -47,7 +47,7 @@ class ViewController: UIViewController {
     @IBAction func button3Tapped(_ sender: UIButton) {
         let gradientColor = UIColor(red: 0.988, green: 0.714, blue: 0.624, alpha: 1.000)
         let gradientColor2 = UIColor(red: 0.988, green: 0.714, blue: 0.624, alpha: 1.000)
-        let preference = Preferences()
+        let preference = ToolTipPreferences()
         preference.drawing.bubbleGradientColors = [gradientColor, gradientColor2]
         sender.showToolTip(identifier: "", message: "Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.", arrowPosition: .bottom, preferences: preference, delegate: nil)
     }
