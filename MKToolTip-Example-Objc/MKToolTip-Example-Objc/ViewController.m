@@ -9,7 +9,7 @@
 #import "ViewController.h"
 #import <MKToolTip/MKToolTip-Swift.h>
 
-@interface ViewController () <MKToolTipDelegate>
+@interface ViewController ()
 
 @end
 
@@ -35,9 +35,9 @@
     UIColor *gradientColor2 =  [[UIColor alloc] initWithRed:0.812 green:0.851 blue:0.875 alpha:1.000];
     
     ToolTipPreferences *preferences = [[ToolTipPreferences alloc] init];
-    [[preferences drawing] setBubbleGradientColors:@[ gradientColor, gradientColor2 ]];
-    [[preferences drawing] setArrowTipCornerRadius:0];
-    [[preferences drawing] setMessageColor:[UIColor blackColor]];
+    [[[preferences drawing] bubble] setGradientColors:@[ gradientColor, gradientColor2 ]];
+    [[[preferences drawing] arrow] setTipCornerRadius:0];
+    [[[preferences drawing] message] setColor:[UIColor blackColor]];
     
     [sender showToolTipWithIdentifier:@""
                                 title:nil
@@ -53,7 +53,7 @@
     UIColor *gradientColor2 =  [[UIColor alloc] initWithRed:0.118 green:0.235 blue:0.447 alpha:1.000];
     
     ToolTipPreferences *preferences = [[ToolTipPreferences alloc] init];
-    [[preferences drawing] setBubbleGradientColors:@[ gradientColor, gradientColor2 ]];
+    [[[preferences drawing] bubble] setGradientColors:@[ gradientColor, gradientColor2 ]];
     
     [sender showToolTipWithIdentifier:@""
                                 title:@"Dapibus"
@@ -69,7 +69,7 @@
     UIColor *gradientColor2 =  [[UIColor alloc] initWithRed:0.988 green:0.714 blue:0.624 alpha:1.000];
     
     ToolTipPreferences *preferences = [[ToolTipPreferences alloc] init];
-    [[preferences drawing] setBubbleGradientColors:@[ gradientColor, gradientColor2 ]];
+    [[[preferences drawing] bubble] setGradientColors:@[ gradientColor, gradientColor2 ]];
     
     
     [sender showToolTipWithIdentifier:@""
