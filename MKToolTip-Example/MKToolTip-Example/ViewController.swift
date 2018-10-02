@@ -23,7 +23,7 @@ class ViewController: UIViewController {
 
 
     @IBAction func barButton1Tapped(_ sender: UIBarButtonItem) {
-        MKToolTip.show(item: sender, identifier: "", title: "Pharetra", message: "Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.", arrowPosition: .top, delegate: nil)
+        sender.showToolTip(identifier: "", title: "Pharetra", message: "Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.", arrowPosition: .top, delegate: nil)
     }
     
     @IBAction func button1Tapped(_ sender: UIButton) {
@@ -33,7 +33,7 @@ class ViewController: UIViewController {
         preference.drawing.bubbleGradientColors = [gradientColor, gradientColor2]
         preference.drawing.arrowTipCornerRadius = 0
         preference.drawing.messageColor = .black
-        MKToolTip.show(view: sender, identifier: "", message: "Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.", arrowPosition: .left, preferences: preference, delegate: nil)
+        sender.showToolTip(identifier: "", message: "Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.", arrowPosition: .left, preferences: preference, delegate: nil)
     }
     
     @IBAction func button2Tapped(_ sender: UIButton) {
@@ -41,7 +41,7 @@ class ViewController: UIViewController {
         let gradientColor2 = UIColor(red: 0.118, green: 0.235, blue: 0.447, alpha: 1.000)
         let preference = Preferences()
         preference.drawing.bubbleGradientColors = [gradientColor, gradientColor2]
-        MKToolTip.show(view: sender, identifier: "", title: "Dapibus", message: "Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.", arrowPosition: .right, preferences: preference, delegate: nil)
+        sender.showToolTip(identifier: "", title: "Dapibus", message: "Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.", arrowPosition: .right, preferences: preference, delegate: nil)
     }
     
     @IBAction func button3Tapped(_ sender: UIButton) {
@@ -49,7 +49,7 @@ class ViewController: UIViewController {
         let gradientColor2 = UIColor(red: 0.988, green: 0.714, blue: 0.624, alpha: 1.000)
         let preference = Preferences()
         preference.drawing.bubbleGradientColors = [gradientColor, gradientColor2]
-        MKToolTip.show(view: sender, identifier: "", message: "Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.", arrowPosition: .bottom, preferences: preference, delegate: nil)
+        sender.showToolTip(identifier: "", message: "Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.", arrowPosition: .bottom, preferences: preference, delegate: nil)
     }
 }
 

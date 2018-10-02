@@ -21,13 +21,12 @@
 }
 
 - (IBAction)barButton1Tapped:(UIBarButtonItem *)sender {
-    [MKToolTip showWithItem:sender
-                 identifier:@""
-                      title:@"Pharetra"
-                    message:@"Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus."
-              arrowPosition:ArrowPositionTop
-                preferences:[[Preferences alloc] init]
-                   delegate:nil];
+    [sender showToolTipWithIdentifier:@""
+                                title:@"Pharetra"
+                              message:@"Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus."
+                        arrowPosition:ArrowPositionTop
+                          preferences:[[Preferences alloc] init]
+                             delegate:nil];
 }
 
 - (IBAction)button1Tapped:(UIButton *)sender {
@@ -40,13 +39,12 @@
     [[preferences drawing] setArrowTipCornerRadius:0];
     [[preferences drawing] setMessageColor:[UIColor blackColor]];
     
-    [MKToolTip showWithView:sender
-                 identifier:@""
-                      title:nil
-                    message:@"Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus."
-              arrowPosition:ArrowPositionLeft
-                preferences:preferences
-                   delegate:nil];
+    [sender showToolTipWithIdentifier:@""
+                                title:nil
+                              message:@"Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus."
+                        arrowPosition:ArrowPositionLeft
+                          preferences:preferences
+                             delegate:nil];
 }
 
 - (IBAction)button2Tapped:(UIButton *)sender {
@@ -57,13 +55,12 @@
     Preferences *preferences = [[Preferences alloc] init];
     [[preferences drawing] setBubbleGradientColors:@[ gradientColor, gradientColor2 ]];
     
-    [MKToolTip showWithView:sender
-                 identifier:@""
-                      title:@"Dapibus"
-                    message:@"Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus."
-              arrowPosition:ArrowPositionRight
-                preferences:preferences
-                   delegate:nil];
+    [sender showToolTipWithIdentifier:@""
+                                title:@"Dapibus"
+                              message:@"Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus."
+                        arrowPosition:ArrowPositionRight
+                          preferences:preferences
+                             delegate:nil];
 }
 
 - (IBAction)button3Tapped:(UIButton *)sender {
@@ -75,13 +72,12 @@
     [[preferences drawing] setBubbleGradientColors:@[ gradientColor, gradientColor2 ]];
     
     
-    [MKToolTip showWithView:sender
-                 identifier:@""
-                      title:nil
-                    message:@"Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus."
-              arrowPosition:ArrowPositionBottom
-                preferences:preferences
-                   delegate:nil];
+    [sender showToolTipWithIdentifier:@""
+                                title:nil
+                              message:@"Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus."
+                        arrowPosition:ArrowPositionBottom
+                          preferences:preferences
+                             delegate:nil];
 }
 
 @end

@@ -28,23 +28,26 @@ import UIKit
     func toolTipViewDidDisappear(for identifier: String, with timeInterval: TimeInterval)
 }
 
-// MARK: Public methods extension
+// MARK: Public methods extensions
 
-public extension MKToolTip {
-    
-    // MARK: Class methods
-    
-    @objc public class func show(item: UIBarItem, identifier: String, title: String? = nil, message: String, arrowPosition: ArrowPosition, preferences: Preferences = Preferences(), delegate: MKToolTipDelegate? = nil) {
-        if let view = item.view {
-            show(view: view, identifier: identifier, title: title, message: message, arrowPosition: arrowPosition, preferences: preferences, delegate: delegate)
-        }
-    }
-    
-    @objc public class func show(view: UIView, identifier: String, title: String? = nil, message: String, arrowPosition: ArrowPosition, preferences: Preferences = Preferences(), delegate: MKToolTipDelegate? = nil) {
-        let tooltip = MKToolTip(view: view, identifier: identifier, title: title, message: message, arrowPosition: arrowPosition, preferences: preferences, delegate: delegate)
+public extension UIView {
+
+    @objc public func showToolTip(identifier: String, title: String? = nil, message: String, arrowPosition: MKToolTip.ArrowPosition, preferences: Preferences = Preferences(), delegate: MKToolTipDelegate? = nil) {
+        let tooltip = MKToolTip(view: self, identifier: identifier, title: title, message: message, arrowPosition: arrowPosition, preferences: preferences, delegate: delegate)
         tooltip.calculateFrame()
         tooltip.show()
     }
+    
+}
+
+public extension UIBarItem {
+    
+    @objc public func showToolTip(identifier: String, title: String? = nil, message: String, arrowPosition: MKToolTip.ArrowPosition, preferences: Preferences = Preferences(), delegate: MKToolTipDelegate? = nil) {
+        if let view = self.view {
+            view.showToolTip(identifier: identifier, title: title, message: message, arrowPosition: arrowPosition, preferences: preferences, delegate: delegate)
+        }
+    }
+    
 }
 
 // MARK: Preferences
@@ -209,7 +212,7 @@ open class MKToolTip: UIView {
     
     // MARK: Private methods
     
-    private func calculateFrame() {
+    fileprivate func calculateFrame() {
         let refViewFrame = presentingView.convert(presentingView.bounds, to: UIApplication.shared.keyWindow);
         
         var xOrigin: CGFloat = 0
@@ -271,7 +274,7 @@ open class MKToolTip: UIView {
         return frame
     }
     
-    private func show() {
+    fileprivate func show() {
         let viewController = UIViewController()
         viewController.view.alpha = 0
         viewController.view.addSubview(self)
