@@ -161,7 +161,7 @@ open class MKToolTip: UIView {
         }()
     
     private lazy var titleSize: CGSize = { [unowned self] in
-        var attributes = [NSAttributedStringKey.font : self.preferences.drawing.title.font]
+        var attributes = [NSAttributedString.Key.font : self.preferences.drawing.title.font]
         
         var textSize = CGSize.zero
         if self.title != nil {
@@ -175,7 +175,7 @@ open class MKToolTip: UIView {
         }()
     
     private lazy var messageSize: CGSize = { [unowned self] in
-        var attributes = [NSAttributedStringKey.font : self.preferences.drawing.message.font]
+        var attributes = [NSAttributedString.Key.font : self.preferences.drawing.message.font]
         
         var textSize = self.message.boundingRect(with: CGSize(width: self.preferences.drawing.bubble.maxWidth - self.preferences.drawing.bubble.inset * 2, height: .greatestFiniteMagnitude), options: .usesLineFragmentOrigin, attributes: attributes, context: nil).size
         
@@ -315,7 +315,7 @@ open class MKToolTip: UIView {
     private func createWindow(with viewController: UIViewController) {
         self.containerWindow = UIWindow(frame: UIScreen.main.bounds)
         self.containerWindow!.rootViewController = viewController
-        self.containerWindow!.windowLevel = UIWindowLevelAlert + 1;
+        self.containerWindow!.windowLevel = UIWindow.Level.alert + 1;
         self.containerWindow!.makeKeyAndVisible()
     }
     
@@ -464,13 +464,13 @@ open class MKToolTip: UIView {
         
         if title != nil {
             let titleRect = CGRect(x: xOrigin, y: yOrigin, width: titleSize.width, height: titleSize.height)
-            title!.draw(in: titleRect, withAttributes: [NSAttributedStringKey.font : preferences.drawing.title.font, NSAttributedStringKey.foregroundColor : preferences.drawing.title.color, NSAttributedStringKey.paragraphStyle : paragraphStyle])
+            title!.draw(in: titleRect, withAttributes: [NSAttributedString.Key.font : preferences.drawing.title.font, NSAttributedString.Key.foregroundColor : preferences.drawing.title.color, NSAttributedString.Key.paragraphStyle : paragraphStyle])
             
             yOrigin = titleRect.y + titleRect.height + preferences.drawing.bubble.spacing
         }
         
         let messageRect = CGRect(x: xOrigin, y: yOrigin, width: messageSize.width, height: messageSize.height)
-        message.draw(in: messageRect, withAttributes: [NSAttributedStringKey.font : preferences.drawing.message.font, NSAttributedStringKey.foregroundColor : preferences.drawing.message.color, NSAttributedStringKey.paragraphStyle : paragraphStyle])
+        message.draw(in: messageRect, withAttributes: [NSAttributedString.Key.font : preferences.drawing.message.font, NSAttributedString.Key.foregroundColor : preferences.drawing.message.color, NSAttributedString.Key.paragraphStyle : paragraphStyle])
     }
 }
 
