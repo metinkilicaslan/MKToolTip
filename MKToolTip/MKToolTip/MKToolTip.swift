@@ -67,6 +67,12 @@ public extension UIBarItem {
             @objc public var spacing: CGFloat = 5
             @objc public var cornerRadius: CGFloat = 5
             @objc public var maxWidth: CGFloat = 210
+            @objc public var color: UIColor = UIColor.clear {
+                didSet {
+                    gradientColors = [color]
+                    gradientLocations = []
+                }
+            }
             @objc public var gradientLocations: [CGFloat] = [0.05, 1.0]
             @objc public var gradientColors: [UIColor] = [UIColor(red: 0.761, green: 0.914, blue: 0.984, alpha: 1.000), UIColor(red: 0.631, green: 0.769, blue: 0.992, alpha: 1.000)]
         }
@@ -82,8 +88,13 @@ public extension UIBarItem {
         }
         
         @objc public class Background: NSObject {
-            @objc public var gradientLocations: [CGFloat] = [0.05, 1.0]
-            @objc public var gradientColors: [UIColor] = [UIColor.clear, UIColor.black.withAlphaComponent(0.4)]
+            @objc public var color: UIColor = UIColor.clear {
+                didSet {
+                    gradientColors = [UIColor.clear, color]
+                }
+            }
+            @objc fileprivate var gradientLocations: [CGFloat] = [0.05, 1.0]
+            @objc fileprivate var gradientColors: [UIColor] = [UIColor.clear, UIColor.black.withAlphaComponent(0.4)]
         }
         
         @objc public var arrow: Arrow = Arrow()
@@ -366,7 +377,7 @@ open class MKToolTip: UIView {
             let radius = refViewFrame.center.farCornerDistance()
             let frame = view.bounds
             let layer = RadialGradientBackgroundLayer(frame: frame, center: refViewFrame.center, radius: radius, locations: preferences.drawing.background.gradientLocations, colors: preferences.drawing.background.gradientColors)
-            view.layer.addSublayer(layer)
+            view.layer.insertSublayer(layer, at: 0)
         }
     }
     
