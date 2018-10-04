@@ -1,7 +1,9 @@
+[![Languages](https://img.shields.io/badge/language-swift%204.2%20|%20objc-FF69B4.svg?style=plastic)](#) <br/>
+
 Description
 --------------
 
-```MKToolTip``` is a customizable tooltip view written in Swift that can be used as a informative tip.
+```MKToolTip``` is a customizable tooltip view written in Swift that can be used as a informative tip inside your both Swift and Objective-C projects.
 
 <img src="https://github.com/metinkilicaslan/MKToolTip/blob/master/MKToolTip.gif" width="320">
 
@@ -34,16 +36,17 @@ Usage
 ```swift
 let gradientColor = UIColor(red: 0.886, green: 0.922, blue: 0.941, alpha: 1.000)
 let gradientColor2 = UIColor(red: 0.812, green: 0.851, blue: 0.875, alpha: 1.000)
-var preferences = Preferences()
-preferences.drawing.bubbleGradientColors = [gradientColor.cgColor, gradientColor2.cgColor]
-preferences.drawing.arrowTipCornerRadius = 0
-preferences.drawing.messageColor = .black
+let preference = ToolTipPreferences()
+preference.drawing.bubble.gradientColors = [gradientColor, gradientColor2]
+preference.drawing.arrow.tipCornerRadius = 0
+preference.drawing.message.color = .black
 ```
 
-2) Secondly call the ``show(view: identifier: title: message: arrowPosition: preferences: delegate:)`` method:
+2) Secondly call the ``showToolTip(identifier: title: message: arrowPosition: preferences: delegate:)`` method:
 
 ```swift
-MKToolTip.show(view: button1, identifier: "identifier", title: "Dapibus", message: "Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum.", arrowPosition: .top)
+let view = UIView()
+view.showToolTip(identifier: "identifier", title: "Dapibus", message: "Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum.", arrowPosition: .top)
 ```
 
 Public interface
@@ -58,12 +61,16 @@ public protocol MKToolTipDelegate: class {
 }
 ```
 
-### Public methods
+### Public extension methods
 
 ```swift
-public class func show(item: UIBarItem, identifier: String, title: String? = nil, message: String, arrowPosition: ArrowPosition, preferences: Preferences = Preferences(), delegate: MKToolTipDelegate? = nil)
-    
-public class func show(view: UIView, identifier: String, title: String? = nil, message: String, arrowPosition: ArrowPosition, preferences: Preferences = Preferences(), delegate: MKToolTipDelegate? = nil)
+public extension UIView {
+    public func showToolTip(identifier: String, title: String? = nil, message: String, arrowPosition: MKToolTip.ArrowPosition, preferences: ToolTipPreferences = ToolTipPreferences(), delegate: MKToolTipDelegate? = nil)
+}
+
+public extension UIBarItem {
+    public func showToolTip(identifier: String, title: String? = nil, message: String, arrowPosition: MKToolTip.ArrowPosition, preferences: ToolTipPreferences = ToolTipPreferences(), delegate: MKToolTipDelegate? = nil)
+}
 ```
 
 
