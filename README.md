@@ -24,6 +24,16 @@ Then, run the following command:
 $ pod install
 ```
 
+### Carthage
+
+To integrate MKToolTip into your Xcode project using Carthage, specify it in your `Cartfile`:
+
+```ogdl
+github "metinkilicaslan/MKToolTip"
+```
+
+Run `carthage update` to build the framework and drag the built `MKToolTip.framework` into your Xcode project.
+
 ### Manually
 
 If you prefer not to use dependency managers, you can integrate MKToolTip into your project manually.
