@@ -7,6 +7,11 @@ Description
 
 <img src="https://github.com/metinkilicaslan/MKToolTip/blob/master/MKToolTip.gif" width="320">
 
+Requirements
+-----------------------------
+
+- iOS 9.0+
+
 Installation
 --------------
 
