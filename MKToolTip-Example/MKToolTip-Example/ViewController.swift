@@ -23,7 +23,17 @@ class ViewController: UIViewController {
 
 
     @IBAction func barButton1Tapped(_ sender: UIBarButtonItem) {
-        sender.showToolTip(identifier: "", title: "Pharetra", message: "Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.", arrowPosition: .top, delegate: nil)
+        let preference = ToolTipPreferences()
+        preference.drawing.bubble.color = UIColor(red: 0.937, green: 0.964, blue: 1.000, alpha: 1.000)
+        preference.drawing.bubble.spacing = 10
+        preference.drawing.bubble.cornerRadius = 5
+        preference.drawing.bubble.inset = 15
+        preference.drawing.arrow.tipCornerRadius = 5
+        preference.drawing.message.color = UIColor(red: 0.200, green: 0.200, blue: 0.200, alpha: 1.000)
+        preference.drawing.message.font = UIFont.systemFont(ofSize: 13, weight: .bold)
+        preference.drawing.button.color = UIColor(red: 0.074, green: 0.231, blue: 0.431, alpha: 1.000)
+        preference.drawing.button.font = UIFont.systemFont(ofSize: 13, weight: .bold)
+        sender.showToolTip(identifier: "", message: "Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.", button: "JUSTO", arrowPosition: .top, preferences: preference, delegate: nil)
     }
     
     @IBAction func button1Tapped(_ sender: UIButton) {

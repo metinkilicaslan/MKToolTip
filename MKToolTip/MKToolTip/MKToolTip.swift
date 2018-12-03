@@ -32,8 +32,8 @@ import UIKit
 
 public extension UIView {
 
-    @objc public func showToolTip(identifier: String, title: String? = nil, message: String, arrowPosition: MKToolTip.ArrowPosition, preferences: ToolTipPreferences = ToolTipPreferences(), delegate: MKToolTipDelegate? = nil) {
-        let tooltip = MKToolTip(view: self, identifier: identifier, title: title, message: message, arrowPosition: arrowPosition, preferences: preferences, delegate: delegate)
+    @objc public func showToolTip(identifier: String, title: String? = nil, message: String, button: String? = nil, arrowPosition: MKToolTip.ArrowPosition, preferences: ToolTipPreferences = ToolTipPreferences(), delegate: MKToolTipDelegate? = nil) {
+        let tooltip = MKToolTip(view: self, identifier: identifier, title: title, message: message, button: button, arrowPosition: arrowPosition, preferences: preferences, delegate: delegate)
         tooltip.calculateFrame()
         tooltip.show()
     }
@@ -42,9 +42,9 @@ public extension UIView {
 
 public extension UIBarItem {
     
-    @objc public func showToolTip(identifier: String, title: String? = nil, message: String, arrowPosition: MKToolTip.ArrowPosition, preferences: ToolTipPreferences = ToolTipPreferences(), delegate: MKToolTipDelegate? = nil) {
+    @objc public func showToolTip(identifier: String, title: String? = nil, message: String, button: String? = nil, arrowPosition: MKToolTip.ArrowPosition, preferences: ToolTipPreferences = ToolTipPreferences(), delegate: MKToolTipDelegate? = nil) {
         if let view = self.view {
-            view.showToolTip(identifier: identifier, title: title, message: message, arrowPosition: arrowPosition, preferences: preferences, delegate: delegate)
+            view.showToolTip(identifier: identifier, title: title, message: message, button: button, arrowPosition: arrowPosition, preferences: preferences, delegate: delegate)
         }
     }
     
@@ -87,6 +87,11 @@ public extension UIBarItem {
             @objc public var color: UIColor = .white
         }
         
+        @objc public class Button: NSObject {
+            @objc public var font: UIFont = UIFont.systemFont(ofSize: 12, weight: .regular)
+            @objc public var color: UIColor = .white
+        }
+        
         @objc public class Background: NSObject {
             @objc public var color: UIColor = UIColor.clear {
                 didSet {
@@ -101,6 +106,7 @@ public extension UIBarItem {
         @objc public var bubble: Bubble = Bubble()
         @objc public var title: Title = Title()
         @objc public var message: Message = Message()
+        @objc public var button: Button = Button()
         @objc public var background: Background = Background()
     }
     
@@ -145,6 +151,7 @@ open class MKToolTip: UIView {
     private var identifier: String
     private var title: String?
     private var message: String
+    private var button: String?
     
     private weak var delegate: MKToolTipDelegate?
     
@@ -185,15 +192,37 @@ open class MKToolTip: UIView {
         return textSize
         }()
     
+    private lazy var buttonSize: CGSize = { [unowned self] in
+        var attributes = [NSAttributedString.Key.font : self.preferences.drawing.button.font]
+        
+        var textSize = CGSize.zero
+        if self.button != nil {
+            textSize = self.button!.boundingRect(with: CGSize(width: self.preferences.drawing.bubble.maxWidth - self.preferences.drawing.bubble.inset * 2, height: .greatestFiniteMagnitude), options: .usesLineFragmentOrigin, attributes: attributes, context: nil).size
+        }
+        
+        textSize.width = ceil(textSize.width)
+        textSize.height = ceil(textSize.height)
+        
+        return textSize
+        }()
+    
     private lazy var bubbleSize: CGSize = { [unowned self] in
-        var height = self.preferences.drawing.bubble.inset + self.messageSize.height + self.preferences.drawing.bubble.inset
+        var height = self.preferences.drawing.bubble.inset
         
         if self.title != nil {
             height += self.titleSize.height + self.preferences.drawing.bubble.spacing
         }
         
-        let inset = self.preferences.drawing.bubble.inset * 2
-        let width = min(self.preferences.drawing.bubble.maxWidth, max(self.titleSize.width + inset, self.messageSize.width + inset))
+        height += self.messageSize.height
+        
+        if self.button != nil {
+            height += self.preferences.drawing.bubble.spacing + self.buttonSize.height
+        }
+        
+        height += self.preferences.drawing.bubble.inset
+        
+        let widthInset = self.preferences.drawing.bubble.inset * 2
+        let width = min(self.preferences.drawing.bubble.maxWidth, max(self.titleSize.width + widthInset, self.messageSize.width + widthInset))
         return CGSize(width: width, height: height)
         }()
     
@@ -215,11 +244,12 @@ open class MKToolTip: UIView {
     
     // MARK: Initializer
     
-    init(view: UIView, identifier: String, title: String? = nil, message: String, arrowPosition: ArrowPosition, preferences: ToolTipPreferences, delegate: MKToolTipDelegate? = nil) {
+    init(view: UIView, identifier: String, title: String? = nil, message: String, button: String? = nil, arrowPosition: ArrowPosition, preferences: ToolTipPreferences, delegate: MKToolTipDelegate? = nil) {
         self.presentingView = view
         self.identifier = identifier
         self.title = title
         self.message = message
+        self.button = button
         self.arrowPosition = arrowPosition
         self.preferences = preferences
         self.delegate = delegate
@@ -471,6 +501,14 @@ open class MKToolTip: UIView {
         
         let messageRect = CGRect(x: xOrigin, y: yOrigin, width: messageSize.width, height: messageSize.height)
         message.draw(in: messageRect, withAttributes: [NSAttributedString.Key.font : preferences.drawing.message.font, NSAttributedString.Key.foregroundColor : preferences.drawing.message.color, NSAttributedString.Key.paragraphStyle : paragraphStyle])
+        
+        if button != nil {
+            yOrigin += messageRect.height + preferences.drawing.bubble.spacing
+            
+            let buttonRect = CGRect(x: xOrigin, y: yOrigin, width: buttonSize.width, height: buttonSize.height)
+            button!.draw(in: buttonRect, withAttributes: [NSAttributedString.Key.font : preferences.drawing.button.font, NSAttributedString.Key.foregroundColor : preferences.drawing.button.color, NSAttributedString.Key.paragraphStyle : paragraphStyle])
+        }
+        
     }
 }
 
