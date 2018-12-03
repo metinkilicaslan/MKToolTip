@@ -28,6 +28,8 @@ class ViewController: UIViewController {
         preference.drawing.bubble.spacing = 10
         preference.drawing.bubble.cornerRadius = 5
         preference.drawing.bubble.inset = 15
+        preference.drawing.bubble.border.color = UIColor(red: 0.768, green: 0.843, blue: 0.937, alpha: 1.000)
+        preference.drawing.bubble.border.width = 1
         preference.drawing.arrow.tipCornerRadius = 5
         preference.drawing.message.color = UIColor(red: 0.200, green: 0.200, blue: 0.200, alpha: 1.000)
         preference.drawing.message.font = UIFont.systemFont(ofSize: 13, weight: .bold)

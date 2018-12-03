@@ -57,12 +57,17 @@ public extension UIBarItem {
     @objc public class Drawing: NSObject {
         
         @objc public class Arrow: NSObject {
-            @objc public var tip: CGPoint = .zero
+            @objc fileprivate var tip: CGPoint = .zero
             @objc public var size: CGSize = CGSize(width: 20, height: 10)
             @objc public var tipCornerRadius: CGFloat = 5
         }
         
         @objc public class Bubble: NSObject {
+            @objc public class Border: NSObject {
+                @objc public var color: UIColor? = nil
+                @objc public var width: CGFloat = 1
+            }
+            
             @objc public var inset: CGFloat = 15
             @objc public var spacing: CGFloat = 5
             @objc public var cornerRadius: CGFloat = 5
@@ -75,6 +80,7 @@ public extension UIBarItem {
             }
             @objc public var gradientLocations: [CGFloat] = [0.05, 1.0]
             @objc public var gradientColors: [UIColor] = [UIColor(red: 0.761, green: 0.914, blue: 0.984, alpha: 1.000), UIColor(red: 0.631, green: 0.769, blue: 0.992, alpha: 1.000)]
+            @objc public var border: Border = Border()
         }
         
         @objc public class Title: NSObject {
@@ -276,30 +282,32 @@ open class MKToolTip: UIView {
         var xOrigin: CGFloat = 0
         var yOrigin: CGFloat = 0
         
+        let spacingForBorder: CGFloat = (preferences.drawing.bubble.border.color != nil) ? preferences.drawing.bubble.border.width : 0
+        
         switch arrowPosition {
         case .top:
             xOrigin = refViewFrame.center.x - contentSize.width / 2
             yOrigin = refViewFrame.y + refViewFrame.height
             preferences.drawing.arrow.tip = CGPoint(x: refViewFrame.center.x - xOrigin, y: 0)
-            bubbleFrame = CGRect(x: 0, y: preferences.drawing.arrow.size.height, width: bubbleSize.width, height: bubbleSize.height)
+            bubbleFrame = CGRect(x: spacingForBorder, y: preferences.drawing.arrow.size.height + spacingForBorder, width: bubbleSize.width, height: bubbleSize.height)
         case .right:
             xOrigin = refViewFrame.x - contentSize.width
             yOrigin = refViewFrame.center.y - contentSize.height / 2
-            preferences.drawing.arrow.tip = CGPoint(x: bubbleSize.width + preferences.drawing.arrow.size.height, y: refViewFrame.center.y - yOrigin)
-            bubbleFrame = CGRect(x: 0, y: 0, width: bubbleSize.width, height: bubbleSize.height)
+            preferences.drawing.arrow.tip = CGPoint(x: bubbleSize.width + preferences.drawing.arrow.size.height + spacingForBorder, y: refViewFrame.center.y - yOrigin)
+            bubbleFrame = CGRect(x: spacingForBorder, y: spacingForBorder, width: bubbleSize.width, height: bubbleSize.height)
         case .bottom:
             xOrigin = refViewFrame.center.x - contentSize.width / 2
             yOrigin = refViewFrame.y - contentSize.height
             preferences.drawing.arrow.tip = CGPoint(x: refViewFrame.center.x - xOrigin, y: bubbleSize.height + preferences.drawing.arrow.size.height)
-            bubbleFrame = CGRect(x: 0, y: 0, width: bubbleSize.width, height: bubbleSize.height)
+            bubbleFrame = CGRect(x: spacingForBorder, y: spacingForBorder, width: bubbleSize.width, height: bubbleSize.height)
         case .left:
             xOrigin = refViewFrame.x + refViewFrame.width
             yOrigin = refViewFrame.center.y - contentSize.height / 2
-            preferences.drawing.arrow.tip = CGPoint(x: 0, y: refViewFrame.center.y - yOrigin)
-            bubbleFrame = CGRect(x: preferences.drawing.arrow.size.height, y: 0, width: bubbleSize.width, height: bubbleSize.height)
+            preferences.drawing.arrow.tip = CGPoint(x: spacingForBorder, y: refViewFrame.center.y - yOrigin)
+            bubbleFrame = CGRect(x: preferences.drawing.arrow.size.height + spacingForBorder, y: spacingForBorder, width: bubbleSize.width, height: bubbleSize.height)
         }
         
-        let calculatedFrame = CGRect(x: xOrigin, y: yOrigin, width: contentSize.width, height: contentSize.height)
+        let calculatedFrame = CGRect(x: xOrigin, y: yOrigin, width: contentSize.width + spacingForBorder * 2, height: contentSize.height + spacingForBorder * 2)
         frame = adjustFrame(calculatedFrame)
     }
     
@@ -411,6 +419,15 @@ open class MKToolTip: UIView {
         }
     }
     
+    private func drawBubbleBorder(_ context: CGContext, path: CGMutablePath, borderColor: UIColor) {
+        context.saveGState()
+        context.addPath(path)
+        context.setStrokeColor(borderColor.cgColor)
+        context.setLineWidth(preferences.drawing.bubble.border.width)
+        context.strokePath()
+        context.restoreGState()
+    }
+    
     private func drawBubble(_ context: CGContext) {
         context.saveGState()
         let path = CGMutablePath()
@@ -461,6 +478,10 @@ open class MKToolTip: UIView {
         context.fillPath()
         context.drawLinearGradient(gradient, start: CGPoint.zero, end: CGPoint(x: 0, y: frame.height), options: [])
         context.restoreGState()
+        
+        if let borderColor = preferences.drawing.bubble.border.color {
+            drawBubbleBorder(context, path: path, borderColor: borderColor)
+        }
     }
     
     private func addTopArc(to path: CGMutablePath) {
