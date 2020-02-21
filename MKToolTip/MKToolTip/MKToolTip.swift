@@ -25,16 +25,18 @@ import UIKit
 
 @objc public protocol MKToolTipDelegate: class {
     func toolTipViewDidAppear(for identifier: String)
+    func toolTipViewDidClick(for identifier: String)
     func toolTipViewDidDisappear(for identifier: String, with timeInterval: TimeInterval)
 }
 
 // MARK: Public methods extensions
 
 public extension UIView {
-
+    
     @objc public func showToolTip(identifier: String, title: String? = nil, message: String, button: String? = nil, arrowPosition: MKToolTip.ArrowPosition, preferences: ToolTipPreferences = ToolTipPreferences(), delegate: MKToolTipDelegate? = nil) {
         let tooltip = MKToolTip(view: self, identifier: identifier, title: title, message: message, button: button, arrowPosition: arrowPosition, preferences: preferences, delegate: delegate)
         tooltip.calculateFrame()
+        tooltip.addButtonForClick()
         tooltip.show()
     }
     
@@ -58,8 +60,8 @@ public extension UIBarItem {
         
         @objc public class Arrow: NSObject {
             @objc fileprivate var tip: CGPoint = .zero
-            @objc public var size: CGSize = CGSize(width: 20, height: 10)
-            @objc public var tipCornerRadius: CGFloat = 5
+            @objc public var size: CGSize = CGSize(width: 10, height: 8)
+            @objc public var tipCornerRadius: CGFloat = 0
         }
         
         @objc public class Bubble: NSObject {
@@ -105,7 +107,7 @@ public extension UIBarItem {
                 }
             }
             @objc fileprivate var gradientLocations: [CGFloat] = [0.05, 1.0]
-            @objc fileprivate var gradientColors: [UIColor] = [UIColor.clear, UIColor.black.withAlphaComponent(0.4)]
+            @objc fileprivate var gradientColors: [UIColor] = [UIColor.clear, UIColor.black.withAlphaComponent(0.1)]
         }
         
         @objc public var arrow: Arrow = Arrow()
@@ -348,6 +350,19 @@ open class MKToolTip: UIView {
         createWindow(with: viewController)
         addTapGesture(for: viewController)
         showWithAnimation()
+    }
+    
+    fileprivate func addButtonForClick(){
+        let button:UIButton = UIButton(frame: CGRect(x: 0, y: 0, width: self.bounds.width, height: self.bounds.height))
+        button.backgroundColor = .clear
+        button.setTitle(nil, for: .normal)
+        button.addTarget(self, action:#selector(self.buttonClicked), for: .touchUpInside)
+        self.addSubview(button)
+    }
+    
+    @objc func buttonClicked() {        
+        self.delegate?.toolTipViewDidClick(for: self.identifier)
+        dismissWithAnimation()
     }
     
     private func createWindow(with viewController: UIViewController) {

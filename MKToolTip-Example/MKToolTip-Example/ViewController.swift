@@ -61,7 +61,20 @@ class ViewController: UIViewController {
         let gradientColor2 = UIColor(red: 0.988, green: 0.714, blue: 0.624, alpha: 1.000)
         let preference = ToolTipPreferences()
         preference.drawing.bubble.gradientColors = [gradientColor, gradientColor2]
-        sender.showToolTip(identifier: "", message: "Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.", arrowPosition: .bottom, preferences: preference, delegate: nil)
+        sender.showToolTip(identifier: "xyz123", message: "Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.", arrowPosition: .bottom, preferences: preference, delegate: self)
     }
 }
 
+extension ViewController : MKToolTipDelegate {
+    func toolTipViewDidAppear(for identifier: String) {
+        print("toolTipViewDidAppear :\(identifier)")
+    }
+    
+    func toolTipViewDidClick(for identifier: String) {
+        print("toolTipViewDidClick : \(identifier)")
+    }
+    
+    func toolTipViewDidDisappear(for identifier: String, with timeInterval: TimeInterval) {
+        print("toolTipViewDidDisappear :\(identifier)")
+    }        
+}
