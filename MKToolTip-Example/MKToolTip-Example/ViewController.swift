@@ -45,6 +45,7 @@ class ViewController: UIViewController {
         preference.drawing.bubble.gradientColors = [gradientColor, gradientColor2]
         preference.drawing.arrow.tipCornerRadius = 0
         preference.drawing.message.color = .black
+        preference.drawing.alignment.textAlignment = .center
         sender.showToolTip(identifier: "", message: "Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.", arrowPosition: .left, preferences: preference, delegate: nil)
     }
     
