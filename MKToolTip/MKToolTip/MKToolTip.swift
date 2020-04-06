@@ -98,6 +98,8 @@ public extension UIBarItem {
             @objc public var color: UIColor = .white
         }
         
+        @objc public var textAlignment: NSTextAlignment = .left
+        
         @objc public class Background: NSObject {
             @objc public var color: UIColor = UIColor.clear {
                 didSet {
@@ -507,15 +509,15 @@ open class MKToolTip: UIView {
     private func drawTexts(to context: CGContext) {
         context.saveGState()
         let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.alignment = .left
+        paragraphStyle.alignment = preferences.drawing.textAlignment
         paragraphStyle.lineBreakMode = NSLineBreakMode.byWordWrapping
         
         let xOrigin = bubbleFrame.x + preferences.drawing.bubble.inset
         var yOrigin = bubbleFrame.y + preferences.drawing.bubble.inset
-        
-        if title != nil {
-            let titleRect = CGRect(x: xOrigin, y: yOrigin, width: titleSize.width, height: titleSize.height)
-            title!.draw(in: titleRect, withAttributes: [NSAttributedString.Key.font : preferences.drawing.title.font, NSAttributedString.Key.foregroundColor : preferences.drawing.title.color, NSAttributedString.Key.paragraphStyle : paragraphStyle])
+        if let title = title {
+            let width = max(titleSize.width, messageSize.width)
+            let titleRect = CGRect(x: xOrigin, y: yOrigin, width: width, height: titleSize.height)
+            title.draw(in: titleRect, withAttributes: [NSAttributedString.Key.font : preferences.drawing.title.font, NSAttributedString.Key.foregroundColor : preferences.drawing.title.color, NSAttributedString.Key.paragraphStyle : paragraphStyle])
             
             yOrigin = titleRect.y + titleRect.height + preferences.drawing.bubble.spacing
         }
