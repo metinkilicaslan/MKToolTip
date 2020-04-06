@@ -45,9 +45,25 @@ class ViewController: UIViewController {
         preference.drawing.bubble.gradientColors = [gradientColor, gradientColor2]
         preference.drawing.arrow.tipCornerRadius = 0
         preference.drawing.message.color = .black
-        preference.drawing.alignment.textAlignment = .center
+        preference.drawing.textAlignment = .center
         sender.showToolTip(identifier: "", message: "Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.", arrowPosition: .left, preferences: preference, delegate: nil)
     }
+    
+    @IBAction func button4Tapped(_ sender: UIButton) {
+        let preference = ToolTipPreferences()
+                preference.drawing.bubble.color = .black
+                preference.drawing.bubble.spacing = 10
+                preference.drawing.bubble.cornerRadius = 5
+                preference.drawing.bubble.inset = 15
+                preference.drawing.title.font = UIFont.systemFont(ofSize: 13, weight: .bold)
+                preference.drawing.message.color = .white
+                preference.drawing.message.font = UIFont.systemFont(ofSize: 12, weight: .medium)
+                preference.animating.showDuration = 0.4
+                preference.animating.dismissDuration = 0.2
+                preference.drawing.textAlignment = .center
+                sender.showToolTip(identifier: "", title: "Buy now, choose dates later", message: "Lock it in today, choose dates when you’re ready", arrowPosition: .bottom, preferences: preference, delegate: nil)
+    }
+    
     
     @IBAction func button2Tapped(_ sender: UIButton) {
         let gradientColor = UIColor(red: 0.165, green: 0.322, blue: 0.596, alpha: 1.000)

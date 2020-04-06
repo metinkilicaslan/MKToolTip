@@ -514,10 +514,10 @@ open class MKToolTip: UIView {
         
         let xOrigin = bubbleFrame.x + preferences.drawing.bubble.inset
         var yOrigin = bubbleFrame.y + preferences.drawing.bubble.inset
-        
-        if title != nil {
-            let titleRect = CGRect(x: xOrigin, y: yOrigin, width: titleSize.width, height: titleSize.height)
-            title!.draw(in: titleRect, withAttributes: [NSAttributedString.Key.font : preferences.drawing.title.font, NSAttributedString.Key.foregroundColor : preferences.drawing.title.color, NSAttributedString.Key.paragraphStyle : paragraphStyle])
+        if let title = title {
+            let width = max(titleSize.width, messageSize.width)
+            let titleRect = CGRect(x: xOrigin, y: yOrigin, width: width, height: titleSize.height)
+            title.draw(in: titleRect, withAttributes: [NSAttributedString.Key.font : preferences.drawing.title.font, NSAttributedString.Key.foregroundColor : preferences.drawing.title.color, NSAttributedString.Key.paragraphStyle : paragraphStyle])
             
             yOrigin = titleRect.y + titleRect.height + preferences.drawing.bubble.spacing
         }
