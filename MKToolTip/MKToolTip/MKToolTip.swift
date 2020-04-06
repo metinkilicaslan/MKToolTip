@@ -98,9 +98,7 @@ public extension UIBarItem {
             @objc public var color: UIColor = .white
         }
         
-        @objc public class TextAlignment: NSObject {
-            @objc public var textAlignment: NSTextAlignment = .left
-        }
+        @objc public var textAlignment: NSTextAlignment = .left
         
         @objc public class Background: NSObject {
             @objc public var color: UIColor = UIColor.clear {
@@ -118,7 +116,6 @@ public extension UIBarItem {
         @objc public var message: Message = Message()
         @objc public var button: Button = Button()
         @objc public var background: Background = Background()
-        @objc public var textAlignment: TextAlignment = TextAlignment()
     }
     
     @objc public class Animating: NSObject {
@@ -512,7 +509,7 @@ open class MKToolTip: UIView {
     private func drawTexts(to context: CGContext) {
         context.saveGState()
         let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.alignment = preferences.drawing.textAlignment.textAlignment
+        paragraphStyle.alignment = preferences.drawing.textAlignment
         paragraphStyle.lineBreakMode = NSLineBreakMode.byWordWrapping
         
         let xOrigin = bubbleFrame.x + preferences.drawing.bubble.inset
