@@ -24,6 +24,7 @@
     [sender showToolTipWithIdentifier:@""
                                 title:@"Pharetra"
                               message:@"Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus."
+                               button: nil
                         arrowPosition:ArrowPositionTop
                           preferences:[[ToolTipPreferences alloc] init]
                              delegate:nil];
@@ -42,6 +43,7 @@
     [sender showToolTipWithIdentifier:@""
                                 title:nil
                               message:@"Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus."
+                               button: nil
                         arrowPosition:ArrowPositionLeft
                           preferences:preferences
                              delegate:nil];
@@ -58,6 +60,7 @@
     [sender showToolTipWithIdentifier:@""
                                 title:@"Dapibus"
                               message:@"Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus."
+                               button: nil
                         arrowPosition:ArrowPositionRight
                           preferences:preferences
                              delegate:nil];
@@ -75,6 +78,7 @@
     [sender showToolTipWithIdentifier:@""
                                 title:nil
                               message:@"Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus."
+                               button: nil
                         arrowPosition:ArrowPositionBottom
                           preferences:preferences
                              delegate:nil];
