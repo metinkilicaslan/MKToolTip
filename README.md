@@ -20,7 +20,7 @@ Installation
 To integrate MKToolTip into your Xcode project using CocoaPods, specify it in your `Podfile`:
 
 ```ruby
-pod 'MKToolTip'
+pod 'MKToolTip', :git => "https://github.com/mrugeshtank/MKToolTip.git"
 ```
 
 Then, run the following command:

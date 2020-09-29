@@ -32,7 +32,7 @@ import UIKit
 
 public extension UIView {
 
-    @objc public func showToolTip(identifier: String, title: String? = nil, message: String, button: String? = nil, arrowPosition: MKToolTip.ArrowPosition, preferences: ToolTipPreferences = ToolTipPreferences(), delegate: MKToolTipDelegate? = nil) {
+    @objc func showToolTip(identifier: String, title: String? = nil, message: String, button: String? = nil, arrowPosition: MKToolTip.ArrowPosition, preferences: ToolTipPreferences = ToolTipPreferences(), delegate: MKToolTipDelegate? = nil) {
         let tooltip = MKToolTip(view: self, identifier: identifier, title: title, message: message, button: button, arrowPosition: arrowPosition, preferences: preferences, delegate: delegate)
         tooltip.calculateFrame()
         tooltip.show()
@@ -42,12 +42,11 @@ public extension UIView {
 
 public extension UIBarItem {
     
-    @objc public func showToolTip(identifier: String, title: String? = nil, message: String, button: String? = nil, arrowPosition: MKToolTip.ArrowPosition, preferences: ToolTipPreferences = ToolTipPreferences(), delegate: MKToolTipDelegate? = nil) {
+    @objc func showToolTip(identifier: String, title: String? = nil, message: String, button: String? = nil, arrowPosition: MKToolTip.ArrowPosition, preferences: ToolTipPreferences = ToolTipPreferences(), delegate: MKToolTipDelegate? = nil) {
         if let view = self.view {
             view.showToolTip(identifier: identifier, title: title, message: message, button: button, arrowPosition: arrowPosition, preferences: preferences, delegate: delegate)
         }
     }
-    
 }
 
 // MARK: Preferences
@@ -351,7 +350,16 @@ open class MKToolTip: UIView {
     }
     
     private func createWindow(with viewController: UIViewController) {
-        self.containerWindow = UIWindow(frame: UIScreen.main.bounds)
+        if #available(iOS 13.0, *) {
+            let windowScene = UIApplication.shared.connectedScenes.filter {$0.activationState == .foregroundActive}.first
+            if let windowScene = windowScene as? UIWindowScene {
+                self.containerWindow = UIWindow(windowScene: windowScene)
+            }
+        } else {
+            // Fallback on earlier versions
+            self.containerWindow = UIWindow(frame: UIScreen.main.bounds)
+        }
+        
         self.containerWindow!.rootViewController = viewController
         self.containerWindow!.windowLevel = UIWindow.Level.alert + 1;
         self.containerWindow!.makeKeyAndVisible()
