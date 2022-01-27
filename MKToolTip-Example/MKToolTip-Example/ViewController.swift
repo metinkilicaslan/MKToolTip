@@ -63,5 +63,21 @@ class ViewController: UIViewController {
         preference.drawing.bubble.gradientColors = [gradientColor, gradientColor2]
         sender.showToolTip(identifier: "", message: "Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.", arrowPosition: .bottom, preferences: preference, delegate: nil)
     }
+
+    @IBAction func textAlignmentButtonTapped(_ sender: UIButton) {
+        let preference = ToolTipPreferences()
+        preference.drawing.bubble.color = UIColor(red: 0.937, green: 0.964, blue: 1.000, alpha: 1.000)
+        preference.drawing.bubble.spacing = 10
+        preference.drawing.bubble.cornerRadius = 5
+        preference.drawing.bubble.inset = 15
+        preference.drawing.message.color = UIColor(red: 0.200, green: 0.200, blue: 0.200, alpha: 1.000)
+        preference.drawing.message.alignment = .center
+        
+        preference.drawing.title.color = UIColor(red: 0.200, green: 0.200, blue: 0.200, alpha: 1.000)
+        preference.drawing.title.font = UIFont.systemFont(ofSize: 13, weight: .bold)
+        preference.drawing.title.alignment = .center
+
+        sender.showToolTip(identifier: "", title: "Dapibus", message: "Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.", arrowPosition: .top, preferences: preference, delegate: nil)
+    }
 }
 

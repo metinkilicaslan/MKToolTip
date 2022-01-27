@@ -23,7 +23,7 @@
 
 import UIKit
 
-@objc public protocol MKToolTipDelegate: class {
+@objc public protocol MKToolTipDelegate: AnyObject {
     func toolTipViewDidAppear(for identifier: String)
     func toolTipViewDidDisappear(for identifier: String, with timeInterval: TimeInterval)
 }
@@ -32,7 +32,7 @@ import UIKit
 
 public extension UIView {
 
-    @objc public func showToolTip(identifier: String, title: String? = nil, message: String, button: String? = nil, arrowPosition: MKToolTip.ArrowPosition, preferences: ToolTipPreferences = ToolTipPreferences(), delegate: MKToolTipDelegate? = nil) {
+    @objc func showToolTip(identifier: String, title: String? = nil, message: String, button: String? = nil, arrowPosition: MKToolTip.ArrowPosition, preferences: ToolTipPreferences = ToolTipPreferences(), delegate: MKToolTipDelegate? = nil) {
         let tooltip = MKToolTip(view: self, identifier: identifier, title: title, message: message, button: button, arrowPosition: arrowPosition, preferences: preferences, delegate: delegate)
         tooltip.calculateFrame()
         tooltip.show()
@@ -42,7 +42,7 @@ public extension UIView {
 
 public extension UIBarItem {
     
-    @objc public func showToolTip(identifier: String, title: String? = nil, message: String, button: String? = nil, arrowPosition: MKToolTip.ArrowPosition, preferences: ToolTipPreferences = ToolTipPreferences(), delegate: MKToolTipDelegate? = nil) {
+    @objc func showToolTip(identifier: String, title: String? = nil, message: String, button: String? = nil, arrowPosition: MKToolTip.ArrowPosition, preferences: ToolTipPreferences = ToolTipPreferences(), delegate: MKToolTipDelegate? = nil) {
         if let view = self.view {
             view.showToolTip(identifier: identifier, title: title, message: message, button: button, arrowPosition: arrowPosition, preferences: preferences, delegate: delegate)
         }
@@ -86,11 +86,13 @@ public extension UIBarItem {
         @objc public class Title: NSObject {
             @objc public var font: UIFont = UIFont.systemFont(ofSize: 12, weight: .bold)
             @objc public var color: UIColor = .white
+            @objc public var alignment: NSTextAlignment = .left
         }
         
         @objc public class Message: NSObject {
             @objc public var font: UIFont = UIFont.systemFont(ofSize: 12, weight: .regular)
             @objc public var color: UIColor = .white
+            @objc public var alignment: NSTextAlignment = .left
         }
         
         @objc public class Button: NSObject {
@@ -507,20 +509,23 @@ open class MKToolTip: UIView {
     private func drawTexts(to context: CGContext) {
         context.saveGState()
         let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.alignment = .left
         paragraphStyle.lineBreakMode = NSLineBreakMode.byWordWrapping
         
         let xOrigin = bubbleFrame.x + preferences.drawing.bubble.inset
         var yOrigin = bubbleFrame.y + preferences.drawing.bubble.inset
         
+        let textWidth = max(titleSize.width, messageSize.width)
         if title != nil {
-            let titleRect = CGRect(x: xOrigin, y: yOrigin, width: titleSize.width, height: titleSize.height)
+            paragraphStyle.alignment = preferences.drawing.title.alignment
+            // title should have the same size as the message to be aligned correctly
+            let titleRect = CGRect(x: xOrigin, y: yOrigin, width: textWidth, height: titleSize.height)
             title!.draw(in: titleRect, withAttributes: [NSAttributedString.Key.font : preferences.drawing.title.font, NSAttributedString.Key.foregroundColor : preferences.drawing.title.color, NSAttributedString.Key.paragraphStyle : paragraphStyle])
             
             yOrigin = titleRect.y + titleRect.height + preferences.drawing.bubble.spacing
         }
-        
-        let messageRect = CGRect(x: xOrigin, y: yOrigin, width: messageSize.width, height: messageSize.height)
+
+        paragraphStyle.alignment = preferences.drawing.title.alignment
+        let messageRect = CGRect(x: xOrigin, y: yOrigin, width: textWidth, height: messageSize.height)
         message.draw(in: messageRect, withAttributes: [NSAttributedString.Key.font : preferences.drawing.message.font, NSAttributedString.Key.foregroundColor : preferences.drawing.message.color, NSAttributedString.Key.paragraphStyle : paragraphStyle])
         
         if button != nil {
