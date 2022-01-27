@@ -86,11 +86,13 @@ public extension UIBarItem {
         @objc public class Title: NSObject {
             @objc public var font: UIFont = UIFont.systemFont(ofSize: 12, weight: .bold)
             @objc public var color: UIColor = .white
+            @objc public var alignment: NSTextAlignment = .left
         }
         
         @objc public class Message: NSObject {
             @objc public var font: UIFont = UIFont.systemFont(ofSize: 12, weight: .regular)
             @objc public var color: UIColor = .white
+            @objc public var alignment: NSTextAlignment = .left
         }
         
         @objc public class Button: NSObject {
@@ -507,20 +509,23 @@ open class MKToolTip: UIView {
     private func drawTexts(to context: CGContext) {
         context.saveGState()
         let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.alignment = .left
         paragraphStyle.lineBreakMode = NSLineBreakMode.byWordWrapping
         
         let xOrigin = bubbleFrame.x + preferences.drawing.bubble.inset
         var yOrigin = bubbleFrame.y + preferences.drawing.bubble.inset
         
+        let textWidth = max(titleSize.width, messageSize.width)
         if title != nil {
-            let titleRect = CGRect(x: xOrigin, y: yOrigin, width: titleSize.width, height: titleSize.height)
+            paragraphStyle.alignment = preferences.drawing.title.alignment
+            // title should have the same size as the message to be aligned correctly
+            let titleRect = CGRect(x: xOrigin, y: yOrigin, width: textWidth, height: titleSize.height)
             title!.draw(in: titleRect, withAttributes: [NSAttributedString.Key.font : preferences.drawing.title.font, NSAttributedString.Key.foregroundColor : preferences.drawing.title.color, NSAttributedString.Key.paragraphStyle : paragraphStyle])
             
             yOrigin = titleRect.y + titleRect.height + preferences.drawing.bubble.spacing
         }
-        
-        let messageRect = CGRect(x: xOrigin, y: yOrigin, width: messageSize.width, height: messageSize.height)
+
+        paragraphStyle.alignment = preferences.drawing.title.alignment
+        let messageRect = CGRect(x: xOrigin, y: yOrigin, width: textWidth, height: messageSize.height)
         message.draw(in: messageRect, withAttributes: [NSAttributedString.Key.font : preferences.drawing.message.font, NSAttributedString.Key.foregroundColor : preferences.drawing.message.color, NSAttributedString.Key.paragraphStyle : paragraphStyle])
         
         if button != nil {
