@@ -23,7 +23,7 @@
 
 import UIKit
 
-@objc public protocol MKToolTipDelegate: class {
+@objc public protocol MKToolTipDelegate: AnyObject {
     func toolTipViewDidAppear(for identifier: String)
     func toolTipViewDidDisappear(for identifier: String, with timeInterval: TimeInterval)
 }
@@ -32,7 +32,7 @@ import UIKit
 
 public extension UIView {
 
-    @objc public func showToolTip(identifier: String, title: String? = nil, message: String, button: String? = nil, arrowPosition: MKToolTip.ArrowPosition, preferences: ToolTipPreferences = ToolTipPreferences(), delegate: MKToolTipDelegate? = nil) {
+    @objc func showToolTip(identifier: String, title: String? = nil, message: String, button: String? = nil, arrowPosition: MKToolTip.ArrowPosition, preferences: ToolTipPreferences = ToolTipPreferences(), delegate: MKToolTipDelegate? = nil) {
         let tooltip = MKToolTip(view: self, identifier: identifier, title: title, message: message, button: button, arrowPosition: arrowPosition, preferences: preferences, delegate: delegate)
         tooltip.calculateFrame()
         tooltip.show()
@@ -42,7 +42,7 @@ public extension UIView {
 
 public extension UIBarItem {
     
-    @objc public func showToolTip(identifier: String, title: String? = nil, message: String, button: String? = nil, arrowPosition: MKToolTip.ArrowPosition, preferences: ToolTipPreferences = ToolTipPreferences(), delegate: MKToolTipDelegate? = nil) {
+    @objc func showToolTip(identifier: String, title: String? = nil, message: String, button: String? = nil, arrowPosition: MKToolTip.ArrowPosition, preferences: ToolTipPreferences = ToolTipPreferences(), delegate: MKToolTipDelegate? = nil) {
         if let view = self.view {
             view.showToolTip(identifier: identifier, title: title, message: message, button: button, arrowPosition: arrowPosition, preferences: preferences, delegate: delegate)
         }
@@ -97,7 +97,13 @@ public extension UIBarItem {
             @objc public var font: UIFont = UIFont.systemFont(ofSize: 12, weight: .regular)
             @objc public var color: UIColor = .white
         }
-        
+
+        // Use this to preserve the same orientation as the view controller showing the tooltip.
+        @objc public class Orientation: NSObject {
+            @objc public var autorotate: Bool = true
+            @objc public var supportedOrientations: UIInterfaceOrientationMask = .all
+        }
+
         @objc public class Background: NSObject {
             @objc public var color: UIColor = UIColor.clear {
                 didSet {
@@ -114,6 +120,7 @@ public extension UIBarItem {
         @objc public var message: Message = Message()
         @objc public var button: Button = Button()
         @objc public var background: Background = Background()
+        @objc public var orientation: Orientation = Orientation()
     }
     
     @objc public class Animating: NSObject {
@@ -152,6 +159,7 @@ open class MKToolTip: UIView {
     private var bubbleFrame: CGRect = .zero
     
     private var containerWindow: UIWindow?
+    private var backgroundLayer: RadialGradientBackgroundLayer?
     private unowned var presentingView: UIView
     
     private var identifier: String
@@ -341,10 +349,13 @@ open class MKToolTip: UIView {
     }
     
     fileprivate func show() {
-        let viewController = UIViewController()
+        let viewController = MKViewController()
         viewController.view.alpha = 0
         viewController.view.addSubview(self)
         
+        viewController.allowAutorotate = preferences.drawing.orientation.autorotate
+        viewController.supportedOrientations = preferences.drawing.orientation.supportedOrientations
+
         createWindow(with: viewController)
         addTapGesture(for: viewController)
         showWithAnimation()
@@ -391,6 +402,7 @@ open class MKToolTip: UIView {
     
     override open func draw(_ rect: CGRect) {
         let context = UIGraphicsGetCurrentContext()!
+        if backgroundLayer != nil { calculateFrame() }
         drawBackgroundLayer()
         drawBubble(context)
         drawTexts(to: context)
@@ -410,13 +422,15 @@ open class MKToolTip: UIView {
     // MARK: Drawing methods
     
     private func drawBackgroundLayer() {
-        if let view = self.containerWindow?.rootViewController?.view {
-            let refViewFrame = presentingView.convert(presentingView.bounds, to: UIApplication.shared.keyWindow);
-            let radius = refViewFrame.center.farCornerDistance()
-            let frame = view.bounds
-            let layer = RadialGradientBackgroundLayer(frame: frame, center: refViewFrame.center, radius: radius, locations: preferences.drawing.background.gradientLocations, colors: preferences.drawing.background.gradientColors)
-            view.layer.insertSublayer(layer, at: 0)
-        }
+        guard let view = self.containerWindow?.rootViewController?.view else { return }
+        backgroundLayer?.removeFromSuperlayer()
+
+        let refViewFrame = presentingView.convert(presentingView.bounds, to: UIApplication.shared.keyWindow);
+        let radius = refViewFrame.center.farCornerDistance()
+        let frame = view.bounds
+        let layer = RadialGradientBackgroundLayer(frame: frame, center: refViewFrame.center, radius: radius, locations: preferences.drawing.background.gradientLocations, colors: preferences.drawing.background.gradientColors)
+        view.layer.insertSublayer(layer, at: 0)
+        backgroundLayer = layer
     }
     
     private func drawBubbleBorder(_ context: CGContext, path: CGMutablePath, borderColor: UIColor) {
@@ -572,3 +586,16 @@ private class RadialGradientBackgroundLayer: CALayer {
     }
 }
 
+// MARK: ViewController
+private class MKViewController: UIViewController {
+    fileprivate var allowAutorotate: Bool = false
+    fileprivate var supportedOrientations: UIInterfaceOrientationMask = .portrait
+
+    override var shouldAutorotate: Bool { allowAutorotate }
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask { supportedOrientations }
+
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        self.view.subviews.first?.setNeedsDisplay()
+    }
+}
